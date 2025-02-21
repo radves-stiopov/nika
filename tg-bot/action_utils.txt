@@ -1,0 +1,16 @@
+#код изменённой функции def call_agent
+
+def call_agent(
+    arguments: Dict[ScAddr, IsDynamic],
+    concepts: List[Idtf],
+    initiation: Idtf = QuestionStatus.QUESTION_INITIATED,
+) -> ScAddr:
+    question = create_action(*concepts)
+    construction = ScConstruction()
+    construction.create_node(sc_types.NODE_CONST, ScAlias.ACTION_NODE)
+    user = client.create_elements(construction)[0]
+    nrel_authors = ScKeynodes.resolve('nrel_authors', sc_types.NODE_CONST_NOROLE)
+    create_norole_relation(question, user, nrel_authors)
+    add_action_arguments(question, arguments)
+    call_action(question, initiation)
+    return question
